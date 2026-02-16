@@ -1,0 +1,33 @@
+{
+	"name": "DS_parameter",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "storagelake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "adf.json",
+				"fileSystem": "parameters"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"p_rel_url": {
+					"type": "string"
+				},
+				"p_sinkfolder": {
+					"type": "string"
+				},
+				"p_filename": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

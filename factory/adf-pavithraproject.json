@@ -1,0 +1,9 @@
+{
+	"name": "adf-pavithraproject",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "dd2373b6-ad0c-44ab-a6e6-6ada03080e1f",
+		"tenantId": "b637c4f6-57b7-44dc-bce4-fec0cd202460"
+	}
+}

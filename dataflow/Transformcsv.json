@@ -1,0 +1,121 @@
+{
+	"name": "Transformcsv",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "dataflow_source",
+						"type": "DatasetReference"
+					},
+					"name": "sourcecsv"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "dataflow_sink",
+						"type": "DatasetReference"
+					},
+					"name": "sink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectcols"
+				},
+				{
+					"name": "filterrows"
+				},
+				{
+					"name": "split1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          OrderID as short,",
+				"          OrderDate as string,",
+				"          OrderTimestamp as string,",
+				"          CustomerID as integer,",
+				"          CustomerName as string,",
+				"          CustomerEmail as string,",
+				"          CustomerPhone as integer,",
+				"          OrderStatus as string,",
+				"          PaymentMethod as string,",
+				"          PaymentStatus as string,",
+				"          Currency as string,",
+				"          OrderAmount as double,",
+				"          DiscountAmount as double,",
+				"          TaxAmount as double,",
+				"          ShippingAmount as double,",
+				"          TotalAmount as double,",
+				"          ProductID as string,",
+				"          ProductName as string,",
+				"          ProductCategory as string,",
+				"          Quantity as short,",
+				"          UnitPrice as double,",
+				"          ShippingAddress as string,",
+				"          ShippingCity as string,",
+				"          ShippingState as string,",
+				"          ShippingCountry as string,",
+				"          PostalCode as integer,",
+				"          BillingAddress as string,",
+				"          DeliveryStatus as string,",
+				"          DeliveryDate as string,",
+				"          CourierName as string,",
+				"          TrackingNumber as string,",
+				"          CreatedBy as string,",
+				"          CreatedDate as string,",
+				"          UpdatedBy as string,",
+				"          UpdatedDate as string,",
+				"          SourceSystem as string,",
+				"          RecordStatus as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sourcecsv",
+				"sourcecsv select(mapColumn(",
+				"          OrderID,",
+				"          OrderDate,",
+				"          OrderTimestamp,",
+				"          CustomerID,",
+				"          CustomerName,",
+				"          CustomerEmail,",
+				"          CustomerPhone,",
+				"          OrderStatus,",
+				"          PaymentMethod,",
+				"          PaymentStatus,",
+				"          Currency,",
+				"          ProductID,",
+				"          ProductName,",
+				"          ProductCategory",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectcols",
+				"selectcols filter(OrderStatus == \"CONFIRMED\") ~> filterrows",
+				"filterrows split(PaymentMethod == 'CARD',",
+				"     disjoint: false) ~> split1@(CARD, DIGITAL)",
+				"split1@DIGITAL derive(CustomerEmail = coalesce(CustomerEmail,'')) ~> derivedColumn1",
+				"derivedColumn1 aggregate(ProductID = max(ProductID)) ~> aggregate1",
+				"split1@CARD alterRow(insertIf(1==1)) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink"
+			]
+		}
+	}
+}

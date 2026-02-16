@@ -1,0 +1,6 @@
+{
+	"name": "OrderIR",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

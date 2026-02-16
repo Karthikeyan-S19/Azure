@@ -1,0 +1,51 @@
+{
+	"name": "file_schema",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "storagelake",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"filename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Orders",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().filename",
+					"type": "Expression"
+				},
+				"fileSystem": "gold"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "OrderID",
+				"type": "String"
+			},
+			{
+				"name": "OrderCreateDate",
+				"type": "String"
+			},
+			{
+				"name": "SourceSystem",
+				"type": "String"
+			},
+			{
+				"name": "OrderStatus",
+				"type": "String"
+			},
+			{
+				"name": "OrderCompleteDate",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
